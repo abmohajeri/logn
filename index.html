@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Logn - Visual Intuition for Algorithm Complexity | Big-O Cheat Sheet</title>
+    <meta name="title" content="Logn - Visual Intuition for Algorithm Complexity | Big-O Cheat Sheet">
+    <meta name="description" content="Learn about algorithm time complexity, especially O(log n), with interactive visualizations and Big-O cheat sheet. Explore search, sorting, graph, tree, and string algorithms with detailed complexity analysis.">
+    <meta name="keywords" content="algorithm complexity, big o notation, O(log n), time complexity, space complexity, algorithm visualization, binary search, merge sort, quick sort, data structures, computer science, programming, algorithms cheat sheet">
+    <meta name="author" content="Abolfazl Mohajeri">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://logn.ir/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://logn.ir/">
+    <meta property="og:title" content="Logn - Visual Intuition for Algorithm Complexity">
+    <meta property="og:description" content="Learn about algorithm time complexity with interactive visualizations and Big-O cheat sheet. Explore search, sorting, graph, tree, and string algorithms.">
+    <meta property="og:image" content="https://logn.ir/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Logn - Algorithm Complexity Visualization">
+    <meta property="og:site_name" content="logn.ir">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://logn.ir/">
+    <meta name="twitter:title" content="Logn - Visual Intuition for Algorithm Complexity">
+    <meta name="twitter:description" content="Learn about algorithm time complexity with interactive visualizations and Big-O cheat sheet.">
+    <meta name="twitter:image" content="https://logn.ir/logo.png">
+    <meta name="twitter:image:alt" content="Logn - Algorithm Complexity Visualization">
+    <meta name="twitter:creator" content="@abolfazlmohajeri">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#06b6d4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="logn.ir">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "logn.ir",
+      "url": "https://logn.ir/",
+      "description": "Visual intuition for algorithm complexity with interactive visualizations and Big-O cheat sheet",
+      "author": {
+        "@type": "Person",
+        "name": "Abolfazl Mohajeri",
+        "url": "https://abolfazlmohajeri.ir"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://logn.ir/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "logn.ir",
+      "description": "Interactive learning platform for understanding algorithm time complexity and Big-O notation",
+      "url": "https://logn.ir/",
+      "educationalCredentialAwarded": "Algorithm Complexity Understanding",
+      "teaches": [
+        "Algorithm Complexity Analysis",
+        "Big-O Notation",
+        "Time Complexity",
+        "Space Complexity",
+        "Data Structures",
+        "Search Algorithms",
+        "Sorting Algorithms",
+        "Graph Algorithms"
+      ]
+    }
+    </script>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- Google Fonts - JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+        }
+        
+        /* Custom checkbox styling */
+        input[type="checkbox"] {
+            accent-color: #06b6d4;
+        }
+        
+        /* Smooth gradient backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        
+        /* Enhanced card hover effects */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.15);
+        }
+        
+        /* Modal styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(6, 182, 212, 0.3);
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: #06b6d4;
+        }
+        
+        /* Hide algorithms beyond the first 3 */
+        .algorithm-hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#0f0f23] via-[#1a1a2e] to-[#16213e] text-gray-100 min-h-screen">
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center px-4 py-20">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="flex items-center justify-center mb-8">
+                <img src="logo.png" alt="Logn - Algorithm Complexity Visualization Logo" class="h-32 md:h-40 w-auto">
+            </div>
+            <p class="text-xl md:text-2xl text-gray-300 italic mb-8">
+                Visual intuition for algorithm complexity
+            </p>
+            <a href="https://github.com/abmohajeri/logn" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 hover:from-cyan-500/30 hover:to-blue-500/30 border border-cyan-400/30 hover:border-cyan-400/50 rounded-lg text-cyan-300 hover:text-cyan-200 transition-all duration-300 font-semibold shadow-lg shadow-cyan-500/10 hover:shadow-xl hover:shadow-cyan-500/20">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                </svg>
+                Contribute on GitHub
+            </a>
+        </div>
+    </section>
+    
+    <!-- Big-O Cheat Sheet Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                    Big-O Cheat Sheet
+                </h2>
+                <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+                    Click on any algorithm card below to view detailed information, complexity analysis, and use cases
+                </p>
+            </div>
+            
+            <!-- Search Algorithms -->
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/30 pb-3">Search Algorithms</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="search-algorithms-grid">
+                
+                <!-- Linear Search -->
+                <div data-algorithm="linear-search" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Linear Search</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-yellow-400 font-semibold">O(n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Check each element sequentially until found.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('linear-search')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('linear-search')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Binary Search -->
+                <div data-algorithm="binary-search" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Binary Search</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-cyan-400 font-semibold">O(log n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Divide search space in half at each step.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('binary-search')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('binary-search')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Jump Search -->
+                <div data-algorithm="jump-search" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Jump Search</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-purple-400 font-semibold">O(√n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Jump ahead by fixed steps, then linear search.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('jump-search')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('jump-search')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Interpolation Search -->
+                <div data-algorithm="interpolation-search" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Interpolation Search</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-cyan-400 font-semibold">O(log log n)</span> avg, <span class="text-amber-400 font-semibold">O(n)</span> worst</p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Estimate position using value distribution.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('interpolation-search')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('interpolation-search')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                </div>
+                <button onclick="toggleSection('search-algorithms')" class="mt-6 mx-auto block px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40" id="search-algorithms-btn">
+                    Show More
+                </button>
+            </div>
+            
+            <!-- Sorting Algorithms -->
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/30 pb-3">Sorting Algorithms</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="sorting-algorithms-grid">
+                
+                <!-- Bubble Sort -->
+                <div data-algorithm="bubble-sort" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Bubble Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-red-400 font-semibold">O(n²)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Compare adjacent elements and swap if needed.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('bubble-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('bubble-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Merge Sort -->
+                <div data-algorithm="merge-sort" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Merge Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-blue-400 font-semibold">O(n log n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(n)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Divide array, sort recursively, then merge.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('merge-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('merge-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Quick Sort -->
+                <div data-algorithm="quick-sort" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Quick Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-blue-400 font-semibold">O(n log n)</span> avg, <span class="text-red-400 font-semibold">O(n²)</span> worst</p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-cyan-400 font-semibold">O(log n)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Partition around pivot, sort recursively.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('quick-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('quick-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Insertion Sort -->
+                <div data-algorithm="insertion-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Insertion Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-emerald-400 font-semibold">O(n)</span> best, <span class="text-red-400 font-semibold">O(n²)</span> worst</p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Build sorted array one element at a time.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('insertion-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('insertion-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Selection Sort -->
+                <div data-algorithm="selection-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Selection Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-red-400 font-semibold">O(n²)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Find minimum and swap with current position.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('selection-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('selection-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Heap Sort -->
+                <div data-algorithm="heap-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Heap Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-blue-400 font-semibold">O(n log n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Build heap, extract max repeatedly.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('heap-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('heap-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Radix Sort -->
+                <div data-algorithm="radix-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Radix Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(nk)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(n+k)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Sort by individual digits, k = number of digits.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('radix-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('radix-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Counting Sort -->
+                <div data-algorithm="counting-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Counting Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(n+k)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(k)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Count occurrences, k = range of values.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('counting-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('counting-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Shell Sort -->
+                <div data-algorithm="shell-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Shell Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-blue-400 font-semibold">O(n log² n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Generalization of insertion sort with gaps.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('shell-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('shell-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Bucket Sort -->
+                <div data-algorithm="bucket-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Bucket Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-emerald-400 font-semibold">O(n+k)</span> avg, <span class="text-red-400 font-semibold">O(n²)</span> worst</p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(n+k)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Distribute elements into buckets, then sort each.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('bucket-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('bucket-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                </div>
+                <button onclick="toggleSection('sorting-algorithms')" class="mt-6 mx-auto block px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40" id="sorting-algorithms-btn">
+                    Show More
+                </button>
+            </div>
+            
+            <!-- Graph Algorithms -->
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/30 pb-3">Graph Algorithms</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="graph-algorithms-grid">
+                
+                <!-- Depth-First Search (DFS) -->
+                <div data-algorithm="dfs" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Depth-First Search</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(V+E)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Explore as far as possible before backtracking.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('dfs')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('dfs')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Breadth-First Search (BFS) -->
+                <div data-algorithm="bfs" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Breadth-First Search</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(V+E)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Explore level by level using a queue.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('bfs')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('bfs')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Dijkstra's Algorithm -->
+                <div data-algorithm="dijkstra" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Dijkstra's Algorithm</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-blue-400 font-semibold">O((V+E) log V)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Find shortest path using priority queue.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('dijkstra')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('dijkstra')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Topological Sort -->
+                <div data-algorithm="topological-sort" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Topological Sort</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(V+E)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V)</span></p>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-4">Linear ordering of vertices in directed acyclic graph.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('topological-sort')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('topological-sort')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Bellman-Ford Algorithm -->
+                <div data-algorithm="bellman-ford" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Bellman-Ford</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-red-400 font-semibold">O(VE)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Shortest path with negative weights, detects cycles.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('bellman-ford')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('bellman-ford')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Floyd-Warshall Algorithm -->
+                <div data-algorithm="floyd-warshall" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Floyd-Warshall</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-red-400 font-semibold">O(V³)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V²)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">All-pairs shortest paths using dynamic programming.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('floyd-warshall')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('floyd-warshall')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Kruskal's Algorithm -->
+                <div data-algorithm="kruskal" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Kruskal's Algorithm</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-blue-400 font-semibold">O(E log E)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Minimum spanning tree using union-find.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('kruskal')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('kruskal')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Prim's Algorithm -->
+                <div data-algorithm="prim" class="algorithm-hidden bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Prim's Algorithm</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-blue-400 font-semibold">O(E log V)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(V)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Minimum spanning tree using priority queue.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('prim')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('prim')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                </div>
+                <button onclick="toggleSection('graph-algorithms')" class="mt-6 mx-auto block px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-xl hover:shadow-cyan-500/40" id="graph-algorithms-btn">
+                    Show More
+                </button>
+            </div>
+            
+            <!-- Tree Algorithms -->
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/30 pb-3">Tree Algorithms</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Binary Search Tree Operations -->
+                <div data-algorithm="bst-operations" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">BST Operations</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-cyan-400 font-semibold">O(log n)</span> avg, <span class="text-amber-400 font-semibold">O(n)</span> worst</p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-cyan-400 font-semibold">O(log n)</span> avg, <span class="text-amber-400 font-semibold">O(n)</span> worst</p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Search, insert, delete in binary search tree.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('bst-operations')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('bst-operations')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Tree Traversal -->
+                <div data-algorithm="tree-traversal" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Tree Traversal</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(h)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Inorder, preorder, postorder traversal. h = height.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('tree-traversal')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('tree-traversal')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Trie Operations -->
+                <div data-algorithm="trie-operations" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Trie Operations</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(m)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(ALPHABET_SIZE × m × N)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Search, insert, delete. m = key length, N = keys.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('trie-operations')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('trie-operations')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                </div>
+            </div>
+            
+            <!-- Data Structures -->
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/30 pb-3">Data Structures</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Hash Table Lookup -->
+                <div data-algorithm="hash-table" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Hash Table Lookup</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-emerald-400 font-semibold">O(1)</span> avg, <span class="text-amber-400 font-semibold">O(n)</span> worst</p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(n)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Direct access via hash function mapping.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('hash-table')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('hash-table')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Binary Heap Insert/Remove -->
+                <div data-algorithm="binary-heap-insert-remove" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Binary Heap Insert/Remove</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-cyan-400 font-semibold">O(log n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Maintain heap property by bubbling up/down.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('binary-heap-insert-remove')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('binary-heap-insert-remove')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Binary Heap Build -->
+                <div data-algorithm="binary-heap-build" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Binary Heap Build</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(n)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Build heap from unsorted array efficiently.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('binary-heap-build')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('binary-heap-build')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                </div>
+            </div>
+            
+            <!-- String Algorithms -->
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/30 pb-3">String Algorithms</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- KMP Algorithm -->
+                <div data-algorithm="kmp" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">KMP Algorithm</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-amber-400 font-semibold">O(n+m)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(m)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Pattern matching using failure function.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('kmp')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('kmp')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Rabin-Karp Algorithm -->
+                <div data-algorithm="rabin-karp" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Rabin-Karp</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-emerald-400 font-semibold">O(n+m)</span> avg, <span class="text-red-400 font-semibold">O(nm)</span> worst</p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-emerald-400 font-semibold">O(1)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Pattern matching using rolling hash.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('rabin-karp')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('rabin-karp')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                </div>
+            </div>
+            
+            <!-- Dynamic Programming -->
+            <div class="mb-12">
+                <h3 class="text-3xl font-bold mb-6 text-cyan-400 border-b border-cyan-400/30 pb-3">Dynamic Programming</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Longest Common Subsequence -->
+                <div data-algorithm="lcs" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Longest Common Subsequence</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-red-400 font-semibold">O(nm)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-red-400 font-semibold">O(nm)</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Find longest subsequence common to two strings.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('lcs')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('lcs')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                <!-- Edit Distance -->
+                <div data-algorithm="edit-distance" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/20 rounded-lg p-6 card-hover hover:border-cyan-400/60 hover:shadow-lg hover:shadow-cyan-400/20 ">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-400">Edit Distance</h3>
+                    <div class="space-y-2 mb-4">
+                        <p class="text-gray-200"><span class="text-gray-400">Time:</span> <span class="text-red-400 font-semibold">O(nm)</span></p>
+                        <p class="text-gray-200"><span class="text-gray-400">Space:</span> <span class="text-amber-400 font-semibold">O(min(n,m))</span></p>
+                    </div>
+                                        <p class="text-gray-300 text-sm mb-4">Levenshtein distance: min edits to transform string.</p>
+                    <div class="flex gap-2">
+                        <button onclick="openDescriptionModal('edit-distance')" class="flex-1 px-3 py-2 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded text-sm transition">Description</button>
+                        <button onclick="openPseudoCodeModal('edit-distance')" class="flex-1 px-3 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 rounded text-sm transition">Pseudo Code</button>
+                    </div>
+                </div>
+                
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+    <!-- Interactive Complexity Visualizer Section -->
+    <section class="py-20 px-4 bg-gradient-to-br from-[#0a0a15] via-[#111122] to-[#0f0f1f]">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                Interactive Complexity Visualizer
+            </h2>
+            
+            <!-- Complexity Selector -->
+            <div class="mb-8 flex flex-wrap justify-center gap-6">
+                <label class="flex items-center gap-2  group">
+                    <input type="checkbox" class="w-5 h-5" id="complexity-o1" checked>
+                    <span class="text-gray-200 group-hover:text-emerald-400 transition-colors">O(1)</span>
+                </label>
+                <label class="flex items-center gap-2  group">
+                    <input type="checkbox" class="w-5 h-5" id="complexity-logn" checked>
+                    <span class="text-gray-200 group-hover:text-cyan-400 transition-colors">O(log n)</span>
+                </label>
+                <label class="flex items-center gap-2  group">
+                    <input type="checkbox" class="w-5 h-5" id="complexity-n" checked>
+                    <span class="text-gray-200 group-hover:text-amber-400 transition-colors">O(n)</span>
+                </label>
+                <label class="flex items-center gap-2  group">
+                    <input type="checkbox" class="w-5 h-5" id="complexity-nlogn" checked>
+                    <span class="text-gray-200 group-hover:text-blue-400 transition-colors">O(n log n)</span>
+                </label>
+                <label class="flex items-center gap-2  group">
+                    <input type="checkbox" class="w-5 h-5" id="complexity-n2" checked>
+                    <span class="text-gray-200 group-hover:text-red-400 transition-colors">O(n²)</span>
+                </label>
+            </div>
+            
+            <!-- Input Size Display -->
+            <div class="mb-8 max-w-2xl mx-auto">
+                <label class="block text-center text-gray-300 mb-6">
+                    Input Size (n): <span id="n-value" class="text-cyan-400 font-semibold text-xl">1000</span>
+                </label>
+            </div>
+            
+            <!-- Chart Container -->
+            <div class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-500/30 rounded-lg p-6 mb-8 shadow-xl shadow-cyan-400/5">
+                <canvas id="complexityChart"></canvas>
+            </div>
+            
+            <!-- Educational Explanation Box -->
+            <div id="explanation-box" class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] border border-cyan-400/40 rounded-lg p-6 shadow-xl shadow-cyan-400/10">
+                <h3 class="text-2xl font-bold mb-4 text-cyan-400">Understanding the Complexities</h3>
+                <div id="explanation-content" class="text-gray-200 leading-relaxed">
+                    <!-- Dynamic content will be inserted here by script.js -->
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Algorithm Modal -->
+    <div id="algorithmModal" class="modal-overlay">
+        <div class="modal-content relative">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalContent">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="py-12 px-4 border-t border-cyan-500/20">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-gray-300 mb-4">
+                Built for developers who care about efficiency.
+            </p>
+            <p class="text-gray-300">
+                Created by <a href="https://abolfazlmohajeri.ir" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 transition-colors font-semibold">Abolfazl Mohajeri</a>
+            </p>
+        </div>
+    </footer>
+    
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+</html>
+
