@@ -2,8 +2,6 @@
   <img src="logo.png" alt="Logn Logo" width="200">
 </div>
 
-# Logn
-
 **Visual intuition for algorithm complexity**
 
 An interactive web application that helps developers understand algorithm time complexity through visualizations and a comprehensive Big-O cheat sheet.
